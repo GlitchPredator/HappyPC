@@ -18,6 +18,7 @@
 		<Profesor coordonator="Patrut Deiana-Natalia" />
 	</Curs>
 </Facultate>
+
 ```
 </table>
 - Proiectarea unui sistem expert care are ca scop configurarea unui PC în cadrul achiziționării acestuia online. 
