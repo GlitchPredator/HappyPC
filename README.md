@@ -12,7 +12,7 @@
 	<Curs title="Sisteme-Expert" cadruDidactic="Pescaru Dan">
 		<Echipaj>
 			<Realizator name="Ciocan Marian Angelo" role="Backend_Interferenta" />
-			<Realizator name="Fineas" role="Trainer_baza-de-cunostinte" />
+			<Realizator name="Mesesan Fineas" role="Trainer_baza-de-cunostinte" />
 			<Realizator name="Gheoace Stelian Valentin" role="Frontend_interfata" />
 		</Echipaj>
 		<Profesor coordonator="Patrut Deiana-Natalia" />
