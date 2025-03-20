@@ -6,4 +6,9 @@
 .modalStyle {
   background-color: white;
   place-content: center;
+  border: 1px solid black;
+}
+
+.autografie {
+  --animate-delay: 0.5s;
 }
