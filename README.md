@@ -1,12 +1,7 @@
 <table>
   <tr>
     <td>
-      <a href="https://github.com/GlitchPredator/HappyPC">
-        <img src="https://i.ibb.co/nqNnY8CY/logo.png" alt="logo" width="150">
-      </a>
-    </td>
-    <td>
-      
+	    
 ```bash
 <Facultate universitate="UPT" profil="AC" an="IV-2025">
 	<Curs title="Sisteme-Expert" cadruDidactic="Pescaru Dan">
@@ -23,7 +18,7 @@
 </table>
 - Proiectarea unui sistem expert care are ca scop configurarea unui PC în cadrul achiziționării acestuia online. 
 <br> <br>
--> Tehnologii folosite:
+- Tehnologii folosite:
 <ul>
 	<li><b>Frontend </b>🎨
 		<ul>
