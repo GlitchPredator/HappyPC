@@ -5,9 +5,44 @@ import Button from 'react-bootstrap/Button';
 
 function App() {
   const [introVisible, setIntroVisible] = useState(true);
+  const [budgetQuestion, setBudgetQuestion] = useState(false);
+  const [categoryQuestion, setCategoryQuestion] = useState(false);
+  const [storageQuestion, setStorageQuestion] = useState(false);
+  const [brandQuestion, setBrandQuestion] = useState(false);
+  const [capacityQuestion, setCapacityQuestion] = useState(false);
+  const [resultModal, showResultModal] = useState(false);
+
+  let answers = [];
 
   function HideAll() {
     setIntroVisible(false);
+    setBudgetQuestion(true);
+  }
+
+  function HideBudgetQuestion() {
+    setBudgetQuestion(false);
+    setCategoryQuestion(true);
+  }
+
+  function HideCategoryQuestion(categoryType) {
+    setCategoryQuestion(false);
+    
+    if (categoryType === 'office')
+      setStorageQuestion(true);
+    if (categoryType === 'gaming')
+      setBrandQuestion(true);
+    if (categoryType === 'editing')
+      setCapacityQuestion(true);
+
+    answers.push(categoryType);
+  }
+
+  function ShowResultModal() {
+    setStorageQuestion(false);
+    setBrandQuestion(false);
+    setCapacityQuestion(false);
+
+    showResultModal(true);
   }
 
   return (
@@ -25,7 +60,63 @@ function App() {
                 <Button onClick={HideAll} variant="danger" className="mt-3 animate__animated animate__fadeIn animate__delay-3s">Vreau un PC nou</Button>
               </center>
             </div>
-          ) : <></>
+          ) :
+            budgetQuestion ? (
+              <>
+                <p className="h6 mr-3 animate__animated animate__bounceIn"> ℹ️ În regulă, pentru început spune-mi te rog de ce buget dispui. </p>
+                <center className='mt-3'>
+                  <Button variant='success' className='mb-3' onClick={HideBudgetQuestion}> Mai mult de 5000 de LEI 💵</Button>
+                  <Button variant='danger' onClick={HideBudgetQuestion}> Mai putin de 5000 de LEI (inclusiv) 💵</Button>
+                </center>
+              </>
+            ) :
+              categoryQuestion ? (
+                <>
+                  <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce categorie de calculator ți se potrivește? </p>
+                  <center className='mt-3 p-6'>
+                    <Button variant="success" className='me-3' onClick={() => HideCategoryQuestion('office')}>Office 🧑‍💼</Button>
+                    <Button variant="danger" className='me-3' onClick={() => HideCategoryQuestion('gaming')}>Gaming 🎮</Button>
+                    <Button variant="warning" onClick={() => HideCategoryQuestion('editing')}>Editing ✏️</Button>
+                  </center>
+                </>
+              ) :
+                storageQuestion ? (
+                  <>
+                    <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce tip de storage vrei sa aiba? </p>
+                    <center className='mt-3 p-6'>
+                      <Button variant='success' className="mb-3" onClick={ShowResultModal}>HDD (Hard Disk Drive)</Button>
+                      <Button variant='danger' onClick={ShowResultModal}>SSD (Solid State Drive</Button>
+                    </center>
+                  </>
+                ) :
+                  brandQuestion ? (
+                    <>
+                      <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Alege unul dintre brand-urile de mai jos:</p>
+                      <center className='mt-3 p-6'>
+                        <Button variant='success' className="me-3"onClick={ShowResultModal}>Asus</Button>
+                        <Button variant='danger' className="me-3" onClick={ShowResultModal}>Myria</Button>
+                        <Button variant='warning' onClick={ShowResultModal}>Lenovo</Button>
+                      </center>
+                    </>
+                  ) :
+                    capacityQuestion ? (
+                      <>
+                        <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce capacitate de memorie iti doresti sa aiba?</p>
+                        <center className='mt-3 p-6'>
+                          <Button variant='success' className="mb-3" onClick={ShowResultModal}> mai mic decat UN_NUMAR</Button>
+                          <Button variant='danger' onClick={ShowResultModal} >mai mare sau egal decat ALT_NUMAR</Button>
+                        </center>
+                      </>
+                    ) :
+                      resultModal ? (
+                      <>
+                        <p>asta iti e pc-ul</p>
+                      </>
+                      )
+                      : 
+                      <>
+                        <p> eroare {answers.map(answer => answer)}</p>
+                      </>
           }
         </div>
       </center>
