@@ -9,5 +9,4 @@ public class ProiectConfigurarePcSeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ProiectConfigurarePcSeApplication.class, args);
 	}
-
 }

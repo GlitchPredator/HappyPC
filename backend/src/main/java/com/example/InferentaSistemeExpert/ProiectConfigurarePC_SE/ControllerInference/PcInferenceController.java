@@ -3,9 +3,12 @@ package com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.ControllerInf
 
 import com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.PC.PC;
 import com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.ServiceInference.PCConfigurationInference;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @RestController
 @RequestMapping("/api/inference")
 public class PcInferenceController {
