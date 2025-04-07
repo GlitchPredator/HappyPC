@@ -1,39 +1,31 @@
 package com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.ServiceInference;
 import com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.PC.PC;
 import org.springframework.stereotype.Service;
-
+import com.example.InferentaSistemeExpert.PcKnowledgeBase;
 import java.util.List;
 
 @Service
 public class PCConfigurationInference {
 
-    private List<PC> PCList;
-
-    public PCConfigurationInference(List<PC> PCList){
-        this.PCList = PCList;
-    }
-
     //Metoda care gaseste PC-urile potrivite in functie de parametrii
-    public boolean BackwardChaining(String name, String category, String processor, int ram, String storage, String gpu, double price) {
-        for (PC pc : this.PCList) {
-            if (pc.getName().equals(name) && pc.getCategory().equals(category) && checkCharacteristics(pc, processor, ram, storage, gpu, price)) {
-                return true;
+    public String BackwardChaining(String name, String category, int ram, String storage, double price) {
+        for (PC pc : PcKnowledgeBase.pcs) {
+            if ((pc.getName().contains("ASUS") || pc.getName().contains("Myria") || pc.getName().contains("Lenovo")) && pc.getCategory().equals(category) && checkCharacteristics(pc, ram, storage, price)) {
+                return "PC recomandat: " + pc.getName() + " " + pc.getProcessor() + " " + pc.getRam() + " " + pc.getStorage() + " " + pc.getGpu() + " " + pc.getPrice();
             }
         }
-        return false;
+
+        return "Nu s-a gasit niciun PC recomandat!";
     }
 
-    private boolean checkCharacteristics(PC pc, String processor, int ram, String storage, String gpu, double price) {
+    private boolean checkCharacteristics(PC pc, int ram, String storage, double price) {
 
         if(pc.getPrice() <= price &&
                 pc.getRam() >= ram &&
-                pc.getProcessor().equals(processor) &&
-                pc.getStorage().equals(storage) &&
-                pc.getGpu().equals(gpu)){
+                pc.getStorage().contains(storage)){
             return true;
         }
 
         return false;
     }
-
 }

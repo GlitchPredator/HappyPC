@@ -1,7 +1,11 @@
+package com.example.InferentaSistemeExpert;
+
+import com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.PC.PC;
+
 import java.util.*;
 
 public class PcKnowledgeBase {
-    static List<PC> pcs = new ArrayList<>();
+    public static List<PC> pcs = new ArrayList<>();
 
     static {
         pcs.add(new PC("HP ProOne 440 G9", "office", "Intel Core i7-13700T", 16, "512GB SSD", "Intel UHD 770", 4399.99));
@@ -27,7 +31,7 @@ public class PcKnowledgeBase {
         List<String> goodProcessors = Arrays.asList("Intel i5-12600K", "AMD Ryzen 5 7600", "Intel Core i3-13100F");
         List<PC> results = new ArrayList<>();
         for (PC pc : pcs) {
-            if (goodProcessors.contains(pc.processor) && pc.price > 0 && pc.price <= 3000) {
+            if (goodProcessors.contains(pc.getProcessor()) && pc.getPrice() > 0 && pc.getPrice() <= 3000) {
                 results.add(pc);
             }
         }
@@ -39,7 +43,7 @@ public class PcKnowledgeBase {
         List<String> goodGPUs = Arrays.asList("NVIDIA RTX A4000", "NVIDIA RTX A2000", "NVIDIA RTX 3060");
         List<PC> results = new ArrayList<>();
         for (PC pc : pcs) {
-            if ("design".equals(pc.category) && pc.ram >= 16 && goodGPUs.contains(pc.gpu) && pc.price > 0 && pc.price <= 6000) {
+            if ("design".equals(pc.getCategory()) && pc.getRam() >= 16 && goodGPUs.contains(pc.getGpu()) && pc.getPrice()> 0 && pc.getPrice() <= 6000) {
                 results.add(pc);
             }
         }
@@ -50,8 +54,8 @@ public class PcKnowledgeBase {
     public static PC getBestSystemForBudget(double budget) {
         PC bestPC = null;
         for (PC pc : pcs) {
-            if (pc.price > 0 && pc.price <= budget) {
-                if (bestPC == null || pc.price > bestPC.price) {
+            if (pc.getPrice() > 0 && pc.getPrice() <= budget) {
+                if (bestPC == null || pc.getPrice() > bestPC.getPrice()) {
                     bestPC = pc;
                 }
             }
@@ -62,23 +66,21 @@ public class PcKnowledgeBase {
     public static void main(String[] args) {
         System.out.println("Affordable and efficient PCs:");
         for (PC pc : getAffordableEfficientPCs()) {
-            System.out.println(pc.name);
+            System.out.println(pc.getName());
         }
         
         System.out.println("\nAffordable video editing PCs:");
         for (PC pc : getAffordableVideoEditingPCs()) {
-            System.out.println(pc.name);
+            System.out.println(pc.getName());
         }
         
         double budget = 5000;
         PC bestPC = getBestSystemForBudget(budget);
         System.out.println("\nBest PC under " + budget + " Lei:");
         if (bestPC != null) {
-            System.out.println(bestPC.name + " - " + bestPC.price + " Lei");
+            System.out.println(bestPC.getName() + " - " + bestPC.getName() + " Lei");
         } else {
             System.out.println("No PC found within budget.");
         }
-        
-       
     }
 }
