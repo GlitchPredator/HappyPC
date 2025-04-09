@@ -3,6 +3,7 @@ package com.example.InferentaSistemeExpert;
 import com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.PC.PC;
 
 import java.util.*;
+import java.sql.*;
 
 public class PcKnowledgeBase {
     public static List<PC> pcs = new ArrayList<>();
@@ -27,6 +28,27 @@ public class PcKnowledgeBase {
     }
     
 //pc cu un processor bun si pret mai mic decat 3000
+
+    public void setupConnection(){
+       String url = "";
+
+       String username = "";
+       String password = "";
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            System.out.println("Connected to Oracle DB!");
+
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM your_table");
+
+            while (rs.next()) {
+                System.out.println("Row: " + rs.getString(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<PC> getAffordableEfficientPCs() {
         List<String> goodProcessors = Arrays.asList("Intel i5-12600K", "AMD Ryzen 5 7600", "Intel Core i3-13100F");
         List<PC> results = new ArrayList<>();
