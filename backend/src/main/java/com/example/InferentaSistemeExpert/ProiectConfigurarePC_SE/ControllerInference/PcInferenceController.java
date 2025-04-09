@@ -9,7 +9,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/inference")
 public class PcInferenceController {
@@ -21,7 +24,7 @@ public class PcInferenceController {
     }
 
     @PostMapping("/answers")
-    public ResponseEntity<String> recomandarePC(@RequestBody PC_DTO pcdto){
+    public ResponseEntity<String> recomandarePC(@RequestBody PC_DTO pcdto) throws IOException {
         String response = inferenceService.BackwardChaining(
                 pcdto.getName(),
                 pcdto.getCategory(),
