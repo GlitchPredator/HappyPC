@@ -3,6 +3,7 @@ import 'animate.css'
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
+
 function App() {
   const [introVisible, setIntroVisible] = useState(true);
   const [budgetQuestion, setBudgetQuestion] = useState(false);
@@ -17,6 +18,7 @@ function App() {
   function HideAll() {
     setIntroVisible(false);
     setBudgetQuestion(true);
+    
   }
 
   function HideBudgetQuestion() {
@@ -66,7 +68,7 @@ function App() {
                 <p className="h6 mr-3 animate__animated animate__bounceIn"> ℹ️ În regulă, pentru început spune-mi te rog de ce buget dispui. </p>
                 <center className='mt-3'>
                   <Button variant='success' className='mb-3' onClick={HideBudgetQuestion}> Mai mult de 5000 de LEI 💵</Button>
-                  <Button variant='danger' onClick={HideBudgetQuestion}> Mai putin de 5000 de LEI (inclusiv) 💵</Button>
+                  <Button variant='danger' onClick={HideBudgetQuestion}> Mai puțin de 5000 de LEI (inclusiv) 💵</Button>
                 </center>
               </>
             ) :
@@ -82,7 +84,7 @@ function App() {
               ) :
                 storageQuestion ? (
                   <>
-                    <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce tip de storage vrei sa aiba? </p>
+                    <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce tip de storage vrei să aibă? </p>
                     <center className='mt-3 p-6'>
                       <Button variant='success' className="mb-3" onClick={ShowResultModal}>HDD (Hard Disk Drive)</Button>
                       <Button variant='danger' onClick={ShowResultModal}>SSD (Solid State Drive</Button>
@@ -101,21 +103,21 @@ function App() {
                   ) :
                     capacityQuestion ? (
                       <>
-                        <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce capacitate de memorie iti doresti sa aiba?</p>
+                        <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce capacitate de memorie îți dorești să aibă?</p>
                         <center className='mt-3 p-6'>
-                          <Button variant='success' className="mb-3" onClick={ShowResultModal}> mai mic decat UN_NUMAR</Button>
-                          <Button variant='danger' onClick={ShowResultModal} >mai mare sau egal decat ALT_NUMAR</Button>
+                          <Button variant='success' className="mb-3" onClick={ShowResultModal}> Mai mic decât UN_NUMAR</Button>
+                          <Button variant='danger' onClick={ShowResultModal} >Mai mare sau egal decât ALT_NUMAR</Button>
                         </center>
                       </>
                     ) :
                       resultModal ? (
                       <>
-                        <p>asta iti e pc-ul</p>
+                        <p>PC_REZULTAT</p>
                       </>
                       )
                       : 
                       <>
-                        <p> eroare {answers.map(answer => answer)}</p>
+                        <p>S-a produs o eroare în timpul căutărilor, te rugăm încearcă mai târziu.</p>
                       </>
           }
         </div>
