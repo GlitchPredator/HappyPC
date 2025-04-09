@@ -36,32 +36,4 @@ public class PC_DTO {
     public double getPrice() {
         return price;
     }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setProcessor(String processor) {
-        this.processor = processor;
-    }
-
-    public void setRam(int ram) {
-        this.ram = ram;
-    }
-
-    public void setStorsge(String storsge) {
-        this.storage = storsge;
-    }
-
-    public void setGpu(String gpu) {
-        this.gpu = gpu;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 }

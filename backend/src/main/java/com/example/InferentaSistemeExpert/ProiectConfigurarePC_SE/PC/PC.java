@@ -1,11 +1,11 @@
 package com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.PC;
 
 public class PC {
-    String name, category, processor, storage, gpu;
+    String name, category, processor, storage, gpu, link;
     int ram;
     double price;
 
-    public PC(String name, String category, String processor, int ram, String storage, String gpu, double price) {
+    public PC(String name, String category, String processor, int ram, String storage, String gpu, double price, String link) {
         this.name = name;
         this.category = category;
         this.processor = processor;
@@ -13,6 +13,7 @@ public class PC {
         this.storage = storage;
         this.gpu = gpu;
         this.price = price;
+        this.link = link;
     }
 
     public String getName() {
@@ -35,39 +36,13 @@ public class PC {
         return gpu;
     }
 
+    public String getLink() { return link; }
+
     public int getRam() {
         return ram;
     }
 
     public double getPrice() {
         return price;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setProcessor(String processor) {
-        this.processor = processor;
-    }
-
-    public void setStorage(String storage) {
-        this.storage = storage;
-    }
-
-    public void setGpu(String gpu) {
-        this.gpu = gpu;
-    }
-
-    public void setRam(int ram) {
-        this.ram = ram;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 }

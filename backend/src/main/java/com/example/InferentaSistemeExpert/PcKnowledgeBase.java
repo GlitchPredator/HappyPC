@@ -2,53 +2,63 @@ package com.example.InferentaSistemeExpert;
 
 import com.example.InferentaSistemeExpert.ProiectConfigurarePC_SE.PC.PC;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
-import java.sql.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class PcKnowledgeBase {
     public static List<PC> pcs = new ArrayList<>();
 
-    static {
-        pcs.add(new PC("HP ProOne 440 G9", "office", "Intel Core i7-13700T", 16, "512GB SSD", "Intel UHD 770", 4399.99));
-        pcs.add(new PC("Office Master", "office", "AMD Ryzen 5 2400G", 16, "1000GB SSD", "Radeon Vega11", 1899.99));
-        pcs.add(new PC("Diaxxa i5-12600K", "office", "Intel i5-12600K", 16, "512GB SSD", "Intel UHD 770", 2199.00));
-        pcs.add(new PC("Myria Digital 38", "gaming_entry", "Intel Core i3-13100F", 16, "512GB SSD", "AMD Radeon RX 550", 2249.90));
-        pcs.add(new PC("Myria Style V87", "gaming_entry", "AMD Ryzen 5 7600", 16, "500GB SSD", "NVIDIA GTX 1650", 3499.99));
-        pcs.add(new PC("Lenovo LOQ 17IRR9", "gaming_mid", "Intel Core i7-14700F", 16, "1TB SSD", "NVIDIA RTX 4060", 6299.99));
-        pcs.add(new PC("ASUS G13CHR", "gaming_mid", "Intel Core i7-14700", 16, "1TB SSD", "NVIDIA RTX 4060", 9499.99));
-        pcs.add(new PC("Myria Creator V3W", "gaming_high", "Intel Core i9-14900F", 64, "2TB SSD", "NVIDIA RTX 4090", 22499.99));
-        pcs.add(new PC("Acer ConceptD 500", "design", "Intel Core i9 12th Gen", 128, "4TB SSD", "NVIDIA RTX A4000", 4500.40));
-        pcs.add(new PC("Dell Precision 3660", "design", "Intel Core i7 12th Gen", 16, "512GB SSD", "NVIDIA RTX A2000", 6087.99));
-        pcs.add(new PC("Lenovo Legion Tower 5i Gen 8", "design", "Intel Core i7 13th Gen", 16, "512GB SSD + 1TB HDD", "NVIDIA RTX 3060", 3736.74));
-        pcs.add(new PC("Apple Mac Studio M2 Ultra", "design", "Apple M2 Ultra", 64, "1TB SSD", "Integrated GPU 60 cores", 2086.22));
-        pcs.add(new PC("HP ENVY 34-c0050", "design", "Intel Core i7-11700", 32, "1TB SSD", "NVIDIA RTX 3060", 26389.93));
-        pcs.add(new PC("HPE ProLiant DL20", "server", "Intel Xeon E-2436", 32, "960GB SSD", "None", 12078.31));
-        pcs.add(new PC("Dell PowerEdge T150", "server", "Intel Xeon E-2378", 64, "2TB HDD + 960GB SSD", "None", 14936.23));
-        pcs.add(new PC("Dell PowerEdge R360", "server", "Intel Xeon E-2434", 16, "600GB HDD", "None", 10646.18));
-    }
-    
-//pc cu un processor bun si pret mai mic decat 3000
+    private static final String GET_URL = "https://apex.oracle.com/pls/apex/fineas_mesesan/api/database/answers/answers";
 
-    public void setupConnection(){
-       String url = "";
+    public static void sendGET() throws IOException {
+        URL obj = new URL(GET_URL);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
 
-       String username = "";
-       String password = "";
-        try (Connection conn = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Connected to Oracle DB!");
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
 
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM your_table");
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-            while (rs.next()) {
-                System.out.println("Row: " + rs.getString(1));
+            // Parse JSON
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            JSONArray items = jsonResponse.getJSONArray("items");
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+
+                String name = item.getString("name");
+                String category = item.getString("category");
+                String processor = item.getString("processor");
+                int ram = item.getInt("ram");
+                String storage = item.getString("storage");
+                String gpu = item.getString("gpu");
+                double price = item.getDouble("price");
+                String link = item.getString("url");
+
+                pcs.add(new PC(name, category, processor, ram, storage, gpu, price, link));
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Added " + items.length() + " PCs from GET response.");
+        } else {
+            System.out.println("GET request did not work.");
         }
     }
 
+//pc cu un processor bun si pret mai mic decat 3000
     public static List<PC> getAffordableEfficientPCs() {
         List<String> goodProcessors = Arrays.asList("Intel i5-12600K", "AMD Ryzen 5 7600", "Intel Core i3-13100F");
         List<PC> results = new ArrayList<>();
@@ -85,7 +95,9 @@ public class PcKnowledgeBase {
         return bestPC;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        sendGET();
+
         System.out.println("Affordable and efficient PCs:");
         for (PC pc : getAffordableEfficientPCs()) {
             System.out.println(pc.getName());
