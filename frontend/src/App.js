@@ -1,8 +1,8 @@
 import './App.css';
 import 'animate.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-
+import axios from 'axios';
 
 function App() {
   const [introVisible, setIntroVisible] = useState(true);
@@ -13,39 +13,99 @@ function App() {
   const [capacityQuestion, setCapacityQuestion] = useState(false);
   const [resultModal, showResultModal] = useState(false);
 
-  let answers = [];
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
+  const [ram, setRam] = useState(0);
+  const [storage, setStorage] = useState('');
+  const [price, setPrice] = useState(0.0);
+
+  const [recomandation, setRecomandation] = useState('');
 
   function HideAll() {
     setIntroVisible(false);
     setBudgetQuestion(true);
-    
+
+    axios.post('http://localhost:8080/api/inference/answers', {
+      name: name,
+      category: category,
+      ram: ram,
+      storage: storage,
+      price: price
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
-  function HideBudgetQuestion() {
+  function HideBudgetQuestion(budget) {
     setBudgetQuestion(false);
     setCategoryQuestion(true);
+
+    if (budget === 'big') {
+      setPrice(5100.00);
+    } else {
+      setPrice(5000.00);
+    }
+    console.log(budget);
   }
 
   function HideCategoryQuestion(categoryType) {
     setCategoryQuestion(false);
-    
-    if (categoryType === 'office')
-      setStorageQuestion(true);
-    if (categoryType === 'gaming')
-      setBrandQuestion(true);
-    if (categoryType === 'editing')
-      setCapacityQuestion(true);
 
-    answers.push(categoryType);
+    if (categoryType === 'office') {
+      setStorageQuestion(true);
+      setCategory('office_entry');
+    }
+    if (categoryType === 'gaming') {
+      setBrandQuestion(true);
+      setCategory('gaming_entry');
+    }
+    if (categoryType === 'editing') {
+      setCapacityQuestion(true);
+      setCategory('editing_entry');
+    }
   }
 
-  function ShowResultModal() {
+  function ShowResultModal(fromModal, answer) {
+    if (fromModal === 'storageModal') {
+      setStorage(answer);
+    }
+    else if (fromModal === 'brandModal') {
+      setName(answer);
+    }
+    else { // capacityModal
+      setRam(answer);
+    }
+
     setStorageQuestion(false);
     setBrandQuestion(false);
     setCapacityQuestion(false);
 
     showResultModal(true);
   }
+
+  useEffect(() => {
+    axios.post('http://localhost:8080/api/inference/answers', {
+      name: name,
+      category: category,
+      ram: ram,
+      storage: storage,
+      price: price
+    })
+      .then(function (response) {
+        console.log(response);
+        setRecomandation(response.data);
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [resultModal]);
+
+  console.log('values ', name, category, ram, storage, price);
 
   return (
     <div className="container vh-100 d-flex justify-content-center align-items-center">
@@ -59,7 +119,7 @@ function App() {
               <p className="h6 mr-3 animate__animated animate__bounceIn animate__delay-1s">ℹ️ Salutare, eu sunt Happy, asistentul tău virtual! ☺️</p>
               <p className="animate__animated animate__zoomIn animate__delay-2s">Dă-mi voie să te ajut să îți alegi un calculator.  😎</p>
               <center>
-                <Button onClick={HideAll} variant="danger" className="mt-3 animate__animated animate__fadeIn animate__delay-3s">Vreau un PC nou</Button>
+                <Button onClick={HideAll} variant="danger" className="mt-3">Vreau un PC nou</Button> animate__animated animate__fadeIn animate__delay-3s"
               </center>
             </div>
           ) :
@@ -67,8 +127,8 @@ function App() {
               <>
                 <p className="h6 mr-3 animate__animated animate__bounceIn"> ℹ️ În regulă, pentru început spune-mi te rog de ce buget dispui. </p>
                 <center className='mt-3'>
-                  <Button variant='success' className='mb-3' onClick={HideBudgetQuestion}> Mai mult de 5000 de LEI 💵</Button>
-                  <Button variant='danger' onClick={HideBudgetQuestion}> Mai puțin de 5000 de LEI (inclusiv) 💵</Button>
+                  <Button variant='success' className='mb-3' onClick={() => HideBudgetQuestion('big')}> Mai mult de 5000 de LEI 💵</Button>
+                  <Button variant='danger' onClick={() => HideBudgetQuestion('small')}> Mai puțin de 5000 de LEI (inclusiv) 💵</Button>
                 </center>
               </>
             ) :
@@ -86,8 +146,8 @@ function App() {
                   <>
                     <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce tip de storage vrei să aibă? </p>
                     <center className='mt-3 p-6'>
-                      <Button variant='success' className="mb-3" onClick={ShowResultModal}>HDD (Hard Disk Drive)</Button>
-                      <Button variant='danger' onClick={ShowResultModal}>SSD (Solid State Drive</Button>
+                      <Button variant='success' className="mb-3" onClick={() => ShowResultModal('storageModal', 'HDD')}>HDD (Hard Disk Drive)</Button>
+                      <Button variant='danger' onClick={() => ShowResultModal('storageModal', 'SSD')}>SSD (Solid State Drive</Button>
                     </center>
                   </>
                 ) :
@@ -95,9 +155,9 @@ function App() {
                     <>
                       <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Alege unul dintre brand-urile de mai jos:</p>
                       <center className='mt-3 p-6'>
-                        <Button variant='success' className="me-3"onClick={ShowResultModal}>Asus</Button>
-                        <Button variant='danger' className="me-3" onClick={ShowResultModal}>Myria</Button>
-                        <Button variant='warning' onClick={ShowResultModal}>Lenovo</Button>
+                        <Button variant='success' className="me-3" onClick={() => ShowResultModal('brandModal', 'Asus')}>Asus</Button>
+                        <Button variant='danger' className="me-3" onClick={() => ShowResultModal('brandModal', 'Myria')}>Myria</Button>
+                        <Button variant='warning' onClick={() => ShowResultModal('brandModal', 'Lenovo')}>Lenovo</Button>
                       </center>
                     </>
                   ) :
@@ -105,20 +165,22 @@ function App() {
                       <>
                         <p className="h6 mr-3 animate__animated animate__bounceIn">ℹ️ Ce capacitate de memorie îți dorești să aibă?</p>
                         <center className='mt-3 p-6'>
-                          <Button variant='success' className="mb-3" onClick={ShowResultModal}> Mai mic decât UN_NUMAR</Button>
-                          <Button variant='danger' onClick={ShowResultModal} >Mai mare sau egal decât ALT_NUMAR</Button>
+                          <Button variant='success' className="mb-3" onClick={() => ShowResultModal('capacityModal', 15)}> Mai mic decât 16GB</Button>
+                          <Button variant='danger' onClick={() => ShowResultModal('capacityModal', 16)} >Mai mare sau egal decât 16GB</Button>
                         </center>
                       </>
                     ) :
                       resultModal ? (
-                      <>
-                        <p>PC_REZULTAT</p>
-                      </>
+                        <>
+                          {
+                            <p>{recomandation}</p>
+                          }
+                        </>
                       )
-                      : 
-                      <>
-                        <p>S-a produs o eroare în timpul căutărilor, te rugăm încearcă mai târziu.</p>
-                      </>
+                        :
+                        <>
+                          <p>S-a produs o eroare în timpul căutărilor, te rugăm încearcă mai târziu.</p>
+                        </>
           }
         </div>
       </center>
