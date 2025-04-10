@@ -12,3 +12,8 @@
 .autografie {
   --animate-delay: 0.5s;
 }
+
+.no-underline-icon {
+  text-decoration: none !important;
+  display: inline;
+}

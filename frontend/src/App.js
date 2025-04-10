@@ -24,20 +24,6 @@ function App() {
   function HideAll() {
     setIntroVisible(false);
     setBudgetQuestion(true);
-
-    axios.post('http://localhost:8080/api/inference/answers', {
-      name: name,
-      category: category,
-      ram: ram,
-      storage: storage,
-      price: price
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
   function HideBudgetQuestion(budget) {
@@ -57,15 +43,15 @@ function App() {
 
     if (categoryType === 'office') {
       setStorageQuestion(true);
-      setCategory('office_entry');
+      setCategory('office');
     }
     if (categoryType === 'gaming') {
       setBrandQuestion(true);
-      setCategory('gaming_entry');
+      setCategory('gaming');
     }
     if (categoryType === 'editing') {
       setCapacityQuestion(true);
-      setCategory('editing_entry');
+      setCategory('design');
     }
   }
 
@@ -87,22 +73,29 @@ function App() {
     showResultModal(true);
   }
 
-  useEffect(() => {
-    axios.post('http://localhost:8080/api/inference/answers', {
-      name: name,
-      category: category,
-      ram: ram,
-      storage: storage,
-      price: price
-    })
-      .then(function (response) {
-        console.log(response);
-        setRecomandation(response.data);
+  function StartAgain() {
+    showResultModal(false);
+    setIntroVisible(true);
+  }
 
+  useEffect(() => {
+    if (resultModal === true) {
+      axios.post('http://localhost:8080/api/inference/answers', {
+        name: name,
+        category: category,
+        ram: ram,
+        storage: storage,
+        price: price
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (response) {
+          console.log(response);
+          setRecomandation(response.data);
+
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }, [resultModal]);
 
   console.log('values ', name, category, ram, storage, price);
@@ -119,7 +112,7 @@ function App() {
               <p className="h6 mr-3 animate__animated animate__bounceIn animate__delay-1s">ℹ️ Salutare, eu sunt Happy, asistentul tău virtual! ☺️</p>
               <p className="animate__animated animate__zoomIn animate__delay-2s">Dă-mi voie să te ajut să îți alegi un calculator.  😎</p>
               <center>
-                <Button onClick={HideAll} variant="danger" className="mt-3">Vreau un PC nou</Button> animate__animated animate__fadeIn animate__delay-3s"
+                <Button onClick={HideAll} variant="danger" className="mt-3 animate__animated animate__fadeIn animate__delay-3s">Vreau un PC nou</Button> 
               </center>
             </div>
           ) :
@@ -173,7 +166,22 @@ function App() {
                       resultModal ? (
                         <>
                           {
-                            <p>{recomandation}</p>
+                            <p>{recomandation && (
+                              <div>
+                                <p>{recomandation.split('Link:')[0]}</p>
+                                {
+                                  recomandation.includes('Link:') &&
+                                  <a
+                                    href={recomandation.split('Link:')[1].trim()}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    Click aici pentru mai multe detalii <span className="no-underline-icon">🔗</span>
+                                  </a>
+                                }
+                              <Button variant='primary' className='mt-3 shadow-lg' onClick={StartAgain}>Încearcă din nou 🔄️</Button>
+                              </div>
+                            )}</p>
                           }
                         </>
                       )
