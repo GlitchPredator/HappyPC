@@ -16,7 +16,7 @@
 
 ```
 </table>
-- Proiectarea unui sistem expert care are ca scop configurarea unui com.example.ProiectConfigurarePC_SE.ServiceInference.PC.PC în cadrul achiziționării acestuia online. 
+- Proiectarea unui sistem expert care are ca scop configurarea unui PC în cadrul achiziționării acestuia online. 
 <br> <br>
 - Tehnologii folosite:
 <ul>
