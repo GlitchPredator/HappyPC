@@ -16,9 +16,9 @@
 
 ```
 </table>
-- Proiectarea unui sistem expert care are ca scop configurarea unui PC în cadrul achiziționării acestuia online. 
+- Design of an expert system aimed at configuring a PC during an online purchase.
 <br> <br>
-- Tehnologii folosite:
+- Technologies used:
 <ul>
 	<li><b>Frontend </b>🎨
 		<ul>
@@ -32,7 +32,7 @@
 			<li> JDBC | ORDS </li>
 		</ul>
 	</li>
-	<li><b>Baza de cunostinte</b>🧾
+	<li><b>Knowledge Base</b>🧾
 		<ul>
 			<li> SQL </li>
 			<li> Oracle Apex </li>
